@@ -3,32 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administración Billetera</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js"></script>
-</head>
-<body>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cartera Virtual</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #e8f5e9;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #e8f5e9, #c8e6c9);
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
         }
         .container {
             background-color: #ffffff;
             padding: 2rem;
-            border-radius: 8px;
+            border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             max-width: 400px;
             width: 100%;
@@ -36,6 +26,7 @@
         h1, h2 {
             color: #2e7d32;
             text-align: center;
+            margin-bottom: 1.5rem;
         }
         .form-group {
             margin-bottom: 1rem;
@@ -44,21 +35,25 @@
             display: block;
             margin-bottom: 0.5rem;
             color: #1b5e20;
+            font-weight: bold;
         }
         input, select {
             width: 100%;
-            padding: 0.5rem;
+            padding: 0.75rem;
             border: 1px solid #4caf50;
             border-radius: 4px;
+            font-size: 1rem;
         }
         button {
             background-color: #4caf50;
             color: white;
             border: none;
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1rem;
             border-radius: 4px;
             cursor: pointer;
             width: 100%;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
         }
         button:hover {
             background-color: #45a049;
@@ -75,20 +70,46 @@
             display: none;
         }
         .balance {
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: bold;
             text-align: center;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             color: #2e7d32;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.5rem;
+            background-color: #e8f5e9;
+            cursor: pointer;
+            border: 1px solid #4caf50;
+        }
+        .tab.active {
+            background-color: #4caf50;
+            color: white;
+        }
+        #logout {
+            background-color: #f44336;
+            margin-top: 1rem;
+        }
+        #logout:hover {
+            background-color: #d32f2f;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div id="login-register">
-            <h1>Cartera Virtual</h1>
+        <h1>Cartera Virtual</h1>
+        <div id="auth-container">
+            <div class="tabs">
+                <div class="tab active" id="login-tab">Iniciar Sesión</div>
+                <div class="tab" id="register-tab">Registrarse</div>
+            </div>
             <div id="login-form">
-                <h2>Iniciar Sesión</h2>
                 <form id="login">
                     <div class="form-group">
                         <label for="login-email">Email:</label>
@@ -100,12 +121,8 @@
                     </div>
                     <button type="submit">Iniciar Sesión</button>
                 </form>
-                <div class="toggle-form">
-                    <a href="#" id="show-register">¿No tienes una cuenta? Regístrate</a>
-                </div>
             </div>
             <div id="register-form" style="display: none;">
-                <h2>Registro</h2>
                 <form id="register">
                     <div class="form-group">
                         <label for="register-id">Identificación:</label>
@@ -129,50 +146,51 @@
                     </div>
                     <button type="submit">Registrarse</button>
                 </form>
-                <div class="toggle-form">
-                    <a href="#" id="show-login">¿Ya tienes una cuenta? Inicia sesión</a>
-                </div>
             </div>
         </div>
         <div id="wallet-functions" class="wallet-functions">
             <h2>Mi Cartera</h2>
             <div class="balance">Saldo: $<span id="balance">0.00</span></div>
-            <div class="form-group">
-                <label for="transaction-type">Tipo de Transacción:</label>
-                <select id="transaction-type">
-                    <option value="deposit">Depósito</option>
-                    <option value="withdraw">Retiro</option>
-                    <option value="transfer">Transferencia</option>
-                    <option value="payment">Pago de Servicio</option>
-                    <option value="recharge">Recarga Móvil</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="amount">Monto:</label>
-                <input type="number" id="amount" min="0" step="0.01" required>
-            </div>
-            <div class="form-group" id="destination-account-group" style="display: none;">
-                <label for="destination-account">Cuenta Destino:</label>
-                <input type="text" id="destination-account">
-            </div>
-            <div class="form-group" id="service-type-group" style="display: none;">
-                <label for="service-type">Tipo de Servicio:</label>
-                <select id="service-type">
-                    <option value="Luz">Luz</option>
-                    <option value="Agua">Agua</option>
-                    <option value="Gas">Gas</option>
-                    <option value="Telefonía">Telefonía</option>
-                    <option value="Internet">Internet</option>
-                    <option value="TV">TV</option>
-                    <option value="Otros">Otros</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="description">Descripción:</label>
-                <input type="text" id="description" required>
-            </div>
-            <button id="perform-transaction">Realizar Transacción</button>
-            <button id="logout" style="margin-top: 1rem; background-color: #f44336;">Cerrar Sesión</button>
+            <form id="transaction-form">
+                <div class="form-group">
+                    <label for="transaction-type">Tipo de Transacción:</label>
+                    <select id="transaction-type">
+                        <option value="">Seleccione tipo de transacción</option>
+                        <option value="deposit">Depósito</option>
+                        <option value="withdraw">Retiro</option>
+                        <option value="transfer">Transferencia</option>
+                        <option value="payment">Pago de Servicio</option>
+                        <option value="recharge">Recarga Móvil</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="amount">Monto:</label>
+                    <input type="number" id="amount" min="0" step="0.01" required>
+                </div>
+                <div class="form-group" id="destination-account-group" style="display: none;">
+                    <label for="destination-account">Cuenta Destino:</label>
+                    <input type="text" id="destination-account">
+                </div>
+                <div class="form-group" id="service-type-group" style="display: none;">
+                    <label for="service-type">Tipo de Servicio:</label>
+                    <select id="service-type">
+                        <option value="">Seleccione tipo de servicio</option>
+                        <option value="Luz">Luz</option>
+                        <option value="Agua">Agua</option>
+                        <option value="Gas">Gas</option>
+                        <option value="Telefonía">Telefonía</option>
+                        <option value="Internet">Internet</option>
+                        <option value="TV">TV</option>
+                        <option value="Otros">Otros</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="description">Descripción:</label>
+                    <input type="text" id="description" required>
+                </div>
+                <button type="submit">Realizar Transacción</button>
+            </form>
+            <button id="logout">Cerrar Sesión</button>
         </div>
     </div>
     <script>
@@ -182,28 +200,31 @@
         let transactions = [];
 
         // Elementos DOM
-        const loginRegisterDiv = document.getElementById('login-register');
-        const walletFunctionsDiv = document.getElementById('wallet-functions');
+        const authContainer = document.getElementById('auth-container');
+        const walletFunctions = document.getElementById('wallet-functions');
         const loginForm = document.getElementById('login-form');
         const registerForm = document.getElementById('register-form');
-        const showRegisterLink = document.getElementById('show-register');
-        const showLoginLink = document.getElementById('show-login');
+        const loginTab = document.getElementById('login-tab');
+        const registerTab = document.getElementById('register-tab');
         const balanceSpan = document.getElementById('balance');
         const transactionTypeSelect = document.getElementById('transaction-type');
         const destinationAccountGroup = document.getElementById('destination-account-group');
         const serviceTypeGroup = document.getElementById('service-type-group');
-        const performTransactionButton = document.getElementById('perform-transaction');
         const logoutButton = document.getElementById('logout');
 
         // Event Listeners
-        showRegisterLink.addEventListener('click', () => {
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'block';
+        loginTab.addEventListener('click', () => {
+            loginTab.classList.add('active');
+            registerTab.classList.remove('active');
+            loginForm.style.display = 'block';
+            registerForm.style.display = 'none';
         });
 
-        showLoginLink.addEventListener('click', () => {
-            registerForm.style.display = 'none';
-            loginForm.style.display = 'block';
+        registerTab.addEventListener('click', () => {
+            registerTab.classList.add('active');
+            loginTab.classList.remove('active');
+            registerForm.style.display = 'block';
+            loginForm.style.display = 'none';
         });
 
         document.getElementById('login').addEventListener('submit', (e) => {
@@ -229,7 +250,11 @@
             serviceTypeGroup.style.display = ['payment', 'recharge'].includes(transactionType) ? 'block' : 'none';
         });
 
-        performTransactionButton.addEventListener('click', performTransaction);
+        document.getElementById('transaction-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            performTransaction();
+        });
+
         logoutButton.addEventListener('click', logout);
 
         // Funciones
@@ -252,12 +277,12 @@
             const newUser = { id, name, email, phone, password, balance: 0 };
             users.push(newUser);
             alert('Registro exitoso. Por favor, inicia sesión.');
-            showLoginLink.click();
+            loginTab.click();
         }
 
         function showWalletFunctions() {
-            loginRegisterDiv.style.display = 'none';
-            walletFunctionsDiv.style.display = 'block';
+            authContainer.style.display = 'none';
+            walletFunctions.style.display = 'block';
         }
 
         function updateBalance() {
@@ -269,6 +294,11 @@
             const amount = parseFloat(document.getElementById('amount').value);
             const description = document.getElementById('description').value;
 
+            if (!type) {
+                alert('Por favor, seleccione un tipo de transacción');
+                return;
+            }
+
             if (isNaN(amount) || amount <= 0) {
                 alert('Por favor, ingrese un monto válido');
                 return;
@@ -279,21 +309,7 @@
                     currentUser.balance += amount;
                     break;
                 case 'withdraw':
-                    if (currentUser.balance < amount) {
-                        alert('Saldo insuficiente');
-                        return;
-                    }
-                    currentUser.balance -= amount;
-                    break;
                 case 'transfer':
-                    const destinationAccount = document.getElementById('destination-account').value;
-                    if (currentUser.balance < amount) {
-                        alert('Saldo insuficiente');
-                        return;
-                    }
-                    currentUser.balance -= amount;
-                    
-                    break;
                 case 'payment':
                 case 'recharge':
                     if (currentUser.balance < amount) {
@@ -315,14 +331,16 @@
 
             updateBalance();
             alert('Transacción realizada con éxito');
+            document.getElementById('transaction-form').reset();
         }
 
         function logout() {
             currentUser = null;
-            loginRegisterDiv.style.display = 'block';
-            walletFunctionsDiv.style.display = 'none';
-            document.getElementById('login-form').reset();
-            document.getElementById('register-form').reset();
+            authContainer.style.display = 'block';
+            walletFunctions.style.display = 'none';
+            document.getElementById('login').reset();
+            document.getElementById('register').reset();
+            loginTab.click();
         }
     </script>
 </body>
